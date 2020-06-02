@@ -89,11 +89,21 @@ num_iters = 400;
 theta = zeros(3, 1);
 [theta, J_history] = gradientDescentMulti(X, y, theta, alpha, num_iters);
 
+% another learning rate
+theta2 = zeros(3, 1);
+[theta2, J_history2] = gradientDescentMulti(X, y, theta2, 0.001, num_iters);
+theta3 = zeros(3, 1);
+[theta3, J_history3] = gradientDescentMulti(X, y, theta3, 0.1, num_iters);
+
 % Plot the convergence graph
 figure;
 plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
 xlabel('Number of iterations');
 ylabel('Cost J');
+hold on;
+plot(1:numel(J_history2), J_history2, '-r', 'LineWidth', 2);
+plot(1:numel(J_history3), J_history3, '-k', 'LineWidth', 2);
+legend('alpha=0.01', 'alpha=0.001', 'alpha=0.1')
 
 % Display gradient descent's result
 fprintf('Theta computed from gradient descent: \n');
@@ -104,7 +114,9 @@ fprintf('\n');
 % ====================== YOUR CODE HERE ======================
 % Recall that the first column of X is all-ones. Thus, it does
 % not need to be normalized.
-price = 0; % You should change this
+norm_sq_ft = (1650 - mu(1)) / sigma(1);
+norm_br = (3 - mu(2)) / sigma(2);
+price = theta(1) + theta(2) * norm_sq_ft + theta(3) * norm_br; % You should change this
 
 
 % ============================================================
@@ -149,7 +161,7 @@ fprintf('\n');
 
 % Estimate the price of a 1650 sq-ft, 3 br house
 % ====================== YOUR CODE HERE ======================
-price = 0; % You should change this
+price = theta(1) + theta(2) * 1650 + theta(3) * 3; % You should change this
 
 
 % ============================================================
