@@ -52,7 +52,17 @@ error_val   = zeros(m, 1);
 %
 
 % ---------------------- Sample Solution ----------------------
-
+for i = 2:m
+  % subset of X, y
+  Xi = X(1:i, :);
+  yi = y(1:i);
+  Xvali = Xval(1:i, :);
+  yvali = yval(1:i);
+  % training
+  [theta] = trainLinearReg([ones(i, 1) Xi], yi, lambda);
+  error_train(i) = linearRegCostFunction([ones(i, 1) Xi], yi, theta, lambda);
+  error_val(i) = linearRegCostFunction([ones(i, 1) Xvali], yvali, theta, 0); % lambda=0
+endfor
 
 
 
