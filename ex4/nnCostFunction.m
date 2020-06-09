@@ -21,7 +21,7 @@ Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
-
+                 
 % Setup some useful variables
 m = size(X, 1);
 
@@ -29,38 +29,6 @@ m = size(X, 1);
 J = 0;
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: You should complete the code by working through the
-%               following parts.
-%
-% Part 1: Feedforward the neural network and return the cost in the
-%         variable J. After implementing Part 1, you can verify that your
-%         cost function computation is correct by verifying the cost
-%         computed in ex4.m
-%
-% Part 2: Implement the backpropagation algorithm to compute the gradients
-%         Theta1_grad and Theta2_grad. You should return the partial derivatives of
-%         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
-%         Theta2_grad, respectively. After implementing Part 2, you can check
-%         that your implementation is correct by running checkNNGradients
-%
-%         Note: The vector y passed into the function is a vector of labels
-%               containing values from 1..K. You need to map this vector into a
-%               binary vector of 1's and 0's to be used with the neural network
-%               cost function.
-%
-%         Hint: We recommend implementing backpropagation using a for-loop
-%               over the training examples if you are implementing it for the
-%               first time.
-%
-% Part 3: Implement regularization with the cost function and gradients.
-%
-%         Hint: You can implement this around the code for
-%               backpropagation. That is, you can compute the gradients for
-%               the regularization separately and then add them to Theta1_grad
-%               and Theta2_grad from Part 2.
-%
 
 % Feedforward
 a1 = [ones(m, 1) X]; % add bias
@@ -81,28 +49,25 @@ end
 J = (1/m) * sum(sum((-y_m .* log(h)) - ((1 - y_m) .* log(1 - h))));
 
 % Regularized Cost function
-Theta1_rg = Theta1;
-Theta2_rg = Theta2;
+T1_rg = Theta1;
+T2_rg = Theta2;
 % exclude bias
-Theta1_rg(:,1) = 0;
-Theta2_rg(:,1) = 0;
-rg = (lambda / (2 * m)) * (sum(sum(Theta1_rg .* Theta1_rg)) + sum(sum(Theta2_rg .* Theta2_rg)));
+T1_rg(:,1) = 0;
+T2_rg(:,1) = 0;
+% regularize cost function
+rg = (lambda / (2 * m)) * (sum(sum(T1_rg .* T1_rg)) + sum(sum(T2_rg .* T2_rg)));
 J = J + rg;
 
+% backpropagation
+d3 = (h - y_m);
+d2 = d3 * Theta2(:,2:end) .* sigmoidGradient(z2);
 
+delta1 = (d2' * a1);
+delta2 = (d3' * a2);
 
-
-
-
-
-
-
-
-
-
-% -------------------------------------------------------------
-
-% =========================================================================
+% regularize gradient
+Theta1_grad = (delta1 / m) + (lambda / m) * T1_rg;
+Theta2_grad = (delta2 / m) + (lambda / m) * T2_rg;
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
