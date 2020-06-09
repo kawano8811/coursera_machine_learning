@@ -12,25 +12,17 @@ m = length(y); % number of training examples
 J = 0;
 grad = zeros(size(theta));
 
-% ====================== YOUR CODE HERE ======================
-% Instructions: Compute the cost and gradient of regularized linear 
-%               regression for a particular choice of theta.
-%
-%               You should set J to the cost and grad to the gradient.
-%
+h = (X * theta); % hypothesis
 
+tj = theta(2:size(theta)(1)); % theta for J, exclude bias
+rj = (lambda / (2 * m)) * sum(tj .* tj); % regularization for J
+J = (1 / (2*m)) * sum(power(h - y, 2)) + rj; % cost
 
+tg = theta;
+tg(1) = 0; % theta for grad, bias is 0
+rg = (lambda / m) * tg; % regularization for grad
+grad = ((1 / m) * sum((h - y) .* X))' + rg;
 
-
-
-
-
-
-
-
-
-
-% =========================================================================
 
 grad = grad(:);
 
