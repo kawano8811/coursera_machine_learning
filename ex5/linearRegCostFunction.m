@@ -21,7 +21,12 @@ J = (1 / (2*m)) * sum(power(h - y, 2)) + rj; % cost
 tg = theta;
 tg(1) = 0; % theta for grad, bias is 0
 rg = (lambda / m) * tg; % regularization for grad
-grad = ((1 / m) * sum((h - y) .* X))' + rg;
+
+if m==1
+  grad = ((h - y) .* X)' + rg;
+else
+  grad = ((1 / m) * sum((h - y) .* X))' + rg;
+endif
 
 
 grad = grad(:);
